@@ -21,7 +21,17 @@ npm-debug.log*
 .vscode/
 .idea/
 *.suo
-*.ntvs*
+*.ntvs*PS D:\College Project\AWD_Project-> npm run dev
+>>
+npm error code ENOENT
+npm error syscall open
+npm error path D:\College Project\AWD_Project-\package.json
+npm error errno -4058
+npm error enoent Could not read package.json: Error: ENOENT: no such file or directory, open 'D:\College Project\AWD_Project-\package.json'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: C:\Users\Jeel\AppData\Local\npm-cache\_logs\2026-07-05T09_12_19_644Z-debug-0.log
+PS D:\College Project\AWD_Project-> 
 *.njsproj
 *.sln
 *.sw?

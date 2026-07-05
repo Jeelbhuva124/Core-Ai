@@ -10,6 +10,10 @@ import { Toaster } from './components/Toaster';
 // ─── Root Pages (src/page) ────────────────────────────────
 import { Home } from './page/Home';
 
+// ─── Auth Pages ───────────────────────────────────────────
+import SignIn from './Auth/SignIn';
+import SignUp from './Auth/SignUp';
+
 // ─── UserPanel Pages ──────────────────────────────────────
 import { UserLayout } from './UserPanel/components/UserLayout';
 import { Shop } from './UserPanel/pages/Shop';
@@ -28,6 +32,10 @@ function App() {
         <Router>
           <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
             <Routes>
+              {/* ── Auth Pages (Standalone) ── */}
+              <Route path="/login" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+
               {/* ── User Panel (with Header & Footer) ─── */}
               <Route element={<UserLayout />}>
                 <Route path="/" element={<Home />} />

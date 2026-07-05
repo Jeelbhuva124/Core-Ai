@@ -37,8 +37,16 @@ export const UserNavbar = () => {
             ))}
           </div>
 
-          {/* Theme Toggle */}
-          <ThemeToggle />
+          {/* Actions */}
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary hidden sm:block">
+              Sign In
+            </Link>
+            <Link to="/signup" className="text-sm font-medium bg-primary text-primary-foreground px-4 py-2 rounded-xl hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">
+              Sign Up
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </nav>
