@@ -9,6 +9,11 @@ import { Toaster } from './components/Toaster';
 
 // ─── Root Pages (src/page) ────────────────────────────────
 import { Home } from './page/Home';
+import Landing from './page/landing';
+import Features from './page/Features';
+import Performance from './page/Performance';
+import Security from './page/Security';
+import Pricing from './page/Pricing';
 
 // ─── Auth Pages ───────────────────────────────────────────
 import SignIn from './Auth/SignIn';
@@ -27,18 +32,23 @@ import { Products }   from './AdminPanel/pages/Products';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="awd-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="awd-ui-theme">
       <ToastProvider>
         <Router>
           <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
             <Routes>
-              {/* ── Auth Pages (Standalone) ── */}
+              {/* ── Standalone Pages ── */}
+              <Route path="/" element={<Landing />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/performance" element={<Performance />} />
+              <Route path="/security" element={<Security />} />
+              <Route path="/pricing" element={<Pricing />} />
               <Route path="/login" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />
 
               {/* ── User Panel (with Header & Footer) ─── */}
               <Route element={<UserLayout />}>
-                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />

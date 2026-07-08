@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ShieldCheck, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { userAPI } from "../api/api.jsx";
+import { useToast } from "../context/ToastContext";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../config/firebase";
-import { userAPI } from "../api/api";
-import { useToast } from "../context/ToastContext";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
   const { addToast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     setIsLoading(true);
     try {
       const response = await userAPI.login({
@@ -24,55 +22,54 @@ export default function SignIn() {
         password: formData.password
       });
 
-      setIsLoading(false);
-      if (response && response.success) {
+      if (response.success) {
+        addToast(response.message || "Connection established successfully!", "success");
+        // Save user profile to session storage
         localStorage.setItem("user", JSON.stringify(response.user));
-        addToast("Signed in successfully!", "success");
-        navigate("/");
+        if (response.user?.firebaseToken) {
+          localStorage.setItem("token", response.user.firebaseToken);
+        }
+        // Redirect to Home panel
+        navigate("/home");
       } else {
-        const errorMsg = response?.message || "Authentication failed";
-        setError(errorMsg);
-        addToast(errorMsg, "error");
+        addToast(response.message || "Authentication failed.", "error");
       }
     } catch (err) {
+      console.error("Login Error:", err);
+      const errMsg = err.response?.data?.message || err.message || "Unable to connect to the backend server.";
+      addToast(errMsg, "error");
+    } finally {
       setIsLoading(false);
-      const errorMsg = err.response?.data?.message || err.message || "An error occurred during sign in";
-      setError(errorMsg);
-      addToast(errorMsg, "error");
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-    if (error) setError("");
-  };
-
   const handleGoogleSignIn = async () => {
-    setError("");
     setIsLoading(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
       const idToken = await result.user.getIdToken();
 
       const response = await userAPI.googleAuth({ idToken });
-
-      setIsLoading(false);
-      if (response && response.success) {
+      
+      if (response.success) {
+        addToast("Google Authentication successful!", "success");
         localStorage.setItem("user", JSON.stringify(response.user));
-        addToast("Signed in with Google successfully!", "success");
-        navigate("/");
+        localStorage.setItem("token", response.user.firebaseToken);
+        navigate("/home");
       } else {
-        const errorMsg = response?.message || "Google sign-in failed";
-        setError(errorMsg);
-        addToast(errorMsg, "error");
+        addToast(response.message || "Google Authentication failed.", "error");
       }
     } catch (err) {
+      console.error("Google Sign-In Error:", err);
+      const errMsg = err.response?.data?.message || err.message || "Google Authentication failed.";
+      addToast(errMsg, "error");
+    } finally {
       setIsLoading(false);
-      if (err.code === "auth/popup-closed-by-user") return;
-      const errorMsg = err.response?.data?.message || err.message || "Google sign-in failed";
-      setError(errorMsg);
-      addToast(errorMsg, "error");
     }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -134,12 +131,6 @@ export default function SignIn() {
               Authenticate to manage your fleet nodes and service protocols.
             </p>
           </div>
-
-          {error && (
-            <div className="p-3 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-xs font-bold tracking-widest uppercase text-center">
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
@@ -216,7 +207,7 @@ export default function SignIn() {
             type="button"
             onClick={handleGoogleSignIn}
             disabled={isLoading}
-            className="w-full flex items-center justify-center space-x-2 py-3.5 px-4 rounded-xl border-2 border-border bg-card hover:bg-muted transition-colors font-bold tracking-widest uppercase text-xs text-foreground disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center space-x-2 py-3.5 px-4 rounded-xl border-2 border-border bg-card hover:bg-muted transition-colors font-bold tracking-widest uppercase text-xs text-foreground disabled:opacity-75"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

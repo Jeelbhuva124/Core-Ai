@@ -2,6 +2,9 @@ import dotenv from 'dotenv';
 import app from './app.js';
 import connectDB from './config/db.js';
 import initializeFirebase from './config/firebase.js';
+import { getApps } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+import User from './models/user.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -37,6 +40,47 @@ const getTimestamp = () => {
   return new Date().toISOString().replace('T', ' ').substring(0, 19);
 };
 
+// Auto-sync missing MongoDB users to Firebase Authentication
+const syncUsersToFirebase = async () => {
+  if (getApps().length === 0) {
+    return;
+  }
+
+  try {
+    const users = await User.find({});
+    const auth = getAuth();
+    let syncCount = 0;
+
+    for (const user of users) {
+      try {
+        await auth.getUserByEmail(user.email_id);
+      } catch (err) {
+        if (err.code === 'auth/user-not-found') {
+          // Password length in Firebase must be at least 6 characters
+          let pwd = user.password;
+          if (!pwd || pwd.length < 6) {
+            pwd = (pwd || 'default').padEnd(6, '0');
+          }
+
+          console.log(`[Sync] Creating missing user in Firebase: ${user.email_id}`);
+          await auth.createUser({
+            email: user.email_id,
+            password: pwd,
+            displayName: user.username
+          });
+          syncCount++;
+        }
+      }
+    }
+
+    if (syncCount > 0) {
+      console.log(`[Sync] Finished syncing database: ${syncCount} user(s) created in Firebase Auth.`);
+    }
+  } catch (error) {
+    console.error('[Sync Error] Failed to sync users to Firebase:', error.message);
+  }
+};
+
 // 1. Initialize Firebase Admin SDK
 let firebaseStatus = '';
 try {
@@ -48,9 +92,12 @@ try {
 // 2. Connect to MongoDB and start Express server
 let dbStatus = '';
 connectDB()
-  .then((conn) => {
+  .then(async (conn) => {
     dbStatus = `🟢 Connected successfully at ${conn.connection.host}`;
     startServer(dbStatus, firebaseStatus, false);
+    
+    // Run the background sync
+    await syncUsersToFirebase();
   })
   .catch(err => {
     dbStatus = `🔴 Connection failed: ${err.message}`;

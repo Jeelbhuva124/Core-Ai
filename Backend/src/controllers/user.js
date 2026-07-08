@@ -232,6 +232,7 @@ const userController = {
 
         try {
             const apiKey = process.env.FIREBASE_API_KEY;
+            let firebaseAuthFailed = false;
             let firebaseUser = null;
 
             if (apiKey) {
@@ -240,10 +241,17 @@ const userController = {
                     console.log(`[Firebase] User authenticated successfully: ${email_id}`);
                 } catch (fbErr) {
                     console.error("[Firebase] Login Error:", fbErr.message);
-                    return res.status(401).json({
-                        success: false,
-                        message: fbErr.message || "Invalid credentials"
-                    });
+                    
+                    // If login is disabled on Firebase, fallback to MongoDB local credentials
+                    if (fbErr.message === 'PASSWORD_LOGIN_DISABLED' || fbErr.message?.includes('DISABLED')) {
+                        console.warn("[Warning] Firebase Email/Password login is disabled. Falling back to local database verification.");
+                        firebaseAuthFailed = true;
+                    } else {
+                        return res.status(401).json({
+                            success: false,
+                            message: fbErr.message || "Invalid credentials"
+                        });
+                    }
                 }
             } else {
                 console.warn("[Warning] FIREBASE_API_KEY is not defined in .env. Falling back to local database password verification.");
@@ -259,8 +267,8 @@ const userController = {
                 });
             }
 
-            // Fallback password comparison if Firebase API key is not configured
-            if (!apiKey) {
+            // Fallback password comparison if Firebase API key is not configured OR Firebase Auth is disabled
+            if (!apiKey || firebaseAuthFailed) {
                 if (dbUser.password !== password) {
                     return res.status(401).json({
                         success: false,

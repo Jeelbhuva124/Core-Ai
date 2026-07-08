@@ -22,9 +22,13 @@ const initializeFirebase = () => {
     }
 
     if (serviceAccount) {
-      // Fix private key formatting (converting literal \n to actual newlines)
-      if (serviceAccount.private_key && serviceAccount.private_key.includes('\\n')) {
+      if (serviceAccount.private_key) {
+        // Convert literal \n text to actual newlines
         serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+        // Convert Windows CRLF newlines to clean LF newlines
+        serviceAccount.private_key = serviceAccount.private_key.replace(/\r/g, '');
+        // Trim any leading or trailing whitespace
+        serviceAccount.private_key = serviceAccount.private_key.trim();
       }
 
       initializeApp({

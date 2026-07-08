@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '../components/Button';
 import { useToast } from '../context/ToastContext';
+import { useTheme } from '../context/ThemeContext';
 import { Link } from 'react-router-dom';
 
 /**
@@ -9,6 +11,11 @@ import { Link } from 'react-router-dom';
  */
 export function Home() {
   const { addToast } = useToast();
+  const { setTheme } = useTheme();
+
+  useEffect(() => {
+    setTheme('dark');
+  }, [setTheme]);
 
   const handleNotify = () => {
     addToast('🎉 Welcome to the AWD Project!', 'success');
