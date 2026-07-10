@@ -9,7 +9,7 @@ import { Toaster } from './components/Toaster';
 
 // ─── Root Pages (src/page) ────────────────────────────────
 import { Home } from './page/LendingPage';
-import Landing from './AdminPanel/pages/Home';
+import Landing from './Dashboard/pages/Home';
 import Features from './page/Features';
 import Performance from './page/Performance';
 import Security from './page/Security';
@@ -20,15 +20,15 @@ import SignIn from './Auth/SignIn';
 import SignUp from './Auth/SignUp';
 
 // ─── UserPanel Pages ──────────────────────────────────────
-import { UserLayout } from './UserPanel/components/UserLayout';
-import { Shop } from './UserPanel/pages/Shop';
-import { About } from './UserPanel/pages/About';
-import { Contact } from './UserPanel/pages/Contact';
+import { UserLayout } from './components/UserLayout';
+import { Shop } from './page/Shop';
+import { About } from './page/About';
+import { Contact } from './page/Contact';
 
 // ─── AdminPanel Pages ─────────────────────────────────────
-import { AdminLayout } from './AdminPanel/components/AdminLayout';
-import { Dashboard }  from './AdminPanel/pages/Dashboard';
-import { Products }   from './AdminPanel/pages/Products';
+import { AdminLayout } from './Dashboard/components/AdminLayout';
+import { Dashboard }  from './Dashboard/pages/Dashboard';
+import { Products }   from './Dashboard/pages/Products';
 
 function App() {
   return (

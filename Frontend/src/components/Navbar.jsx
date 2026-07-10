@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import { ThemeToggle } from '../../components/ThemeToggle';
-import logoImg from '../../assets/logo2.png';
+import { ThemeToggle } from './ThemeToggle';
+import logoImg from '../assets/logo2.png';
 
 export const UserNavbar = () => {
   const location = useLocation();

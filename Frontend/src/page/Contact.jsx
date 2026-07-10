@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Button } from '../../components/Button';
-import { useToast } from '../../context/ToastContext';
+import { Button } from '../components/Button';
+import { useToast } from '../context/ToastContext';
 
 export const Contact = () => {
   const { addToast } = useToast();
