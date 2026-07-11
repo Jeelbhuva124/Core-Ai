@@ -2,14 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Sparkles, Mic, Plus, X, ArrowUp, Paperclip, Triangle, 
-  MoreHorizontal, Video, ChevronRight, Image as ImageIcon, 
-  Terminal, Edit3, MessageSquare, Lightbulb, RefreshCw 
+  Video, Image as ImageIcon, RefreshCw 
 } from 'lucide-react';
-<<<<<<< HEAD
-import { useNavigate } from 'react-router-dom';
-import WebGLBackground from '../../components/WebGLBackground';
 
-=======
 import { socket } from '../../utils/socket';
 
 // Custom inline style markdown parser
@@ -33,7 +28,6 @@ const renderTableBlock = (rows, key) => {
   if (rows.length === 0) return null;
   const headers = rows[0];
   const dataRows = rows.slice(1);
->>>>>>> 715814d4b475b37fb9e9e7efd451d8e255bd22cb
 
   return (
     <div key={key} className="my-4 overflow-x-auto rounded-xl border border-border bg-card/45 backdrop-blur-sm shadow-sm">
@@ -291,55 +285,6 @@ const Landing = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <>
-      {/* ─── SIMPLE FADE REVEAL (Only on initial load) ─── */}
-      {showSplash && (
-        <motion.div
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 0, pointerEvents: 'none' }}
-          transition={{ delay: 2.0, duration: 1.0, ease: "easeInOut" }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050505]"
-        >
-           <motion.div
-              initial={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              className="relative flex items-center justify-center"
-           >
-             {/* Subtle glow behind logo */}
-             <div className="absolute w-32 h-32 bg-cyan-500/20 blur-[40px] rounded-full" />
-             <img 
-                src="/logo.png" 
-                alt="Core AI Logo" 
-                className="w-32 h-32 object-contain drop-shadow-[0_0_30px_rgba(0,229,255,0.8)] relative z-10 dark:brightness-0 dark:invert" 
-             />
-           </motion.div>
-        </motion.div>
-      )}
-
-      {/* Main App Container */}
-      <motion.div
-        initial={showSplash ? { opacity: 0, scale: 1.05 } : { opacity: 1, scale: 1 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={showSplash ? { duration: 1.2, delay: 2.4, ease: [0.25, 0.46, 0.45, 0.94] } : { duration: 0.4, ease: "easeOut" }}
-        className="flex h-screen w-full bg-[#0a0a0a] text-[#ededed] font-sans overflow-hidden"
-      >
-      {/* ─── 3D PARTICLE BACKGROUND ─── */}
-      <WebGLBackground />
-
-      {/* ─── SIDEBAR ─── */}
-      <motion.aside
-        initial={{ x: -40, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="w-64 flex-shrink-0 flex flex-col bg-[#0f0f0f]/80 backdrop-blur-sm border-r border-white/5 h-full p-4 overflow-y-auto hidden md:flex relative z-10"
-      >
-        {/* Logo */}
-        <div className="flex items-center gap-3 mb-6 px-2">
-          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.4)] dark:brightness-0 dark:invert" />
-          <span className="text-lg font-bold tracking-wide">Core AI</span>
-=======
     <div className="flex flex-col h-full bg-background relative overflow-hidden">
       
       {/* Top Header Row: Connection Status */}
@@ -348,7 +293,6 @@ const Landing = () => {
         <div className="flex items-center gap-2 bg-card/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-border shadow-sm text-xs font-medium">
           <span className={`w-2 h-2 rounded-full ${socketConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
           <span className="text-muted-foreground">{socketConnected ? 'Connected' : 'Disconnected'}</span>
->>>>>>> 715814d4b475b37fb9e9e7efd451d8e255bd22cb
         </div>
       </div>
 

@@ -7,10 +7,7 @@ import { useTheme } from '../context/ThemeContext';
 
 import WebGLBackground from '../components/WebGLBackground';
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 715814d4b475b37fb9e9e7efd451d8e255bd22cb
 export function Home() {
   const { theme } = useTheme();
 
