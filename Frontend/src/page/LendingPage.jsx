@@ -5,10 +5,7 @@ import { useToast } from '../context/ToastContext';
 import { useTheme } from '../context/ThemeContext';
 import { Link } from 'react-router-dom';
 
-/**
- * Home — root landing page (src/page/Home.jsx)
- * A beautiful landing page showcasing features, with theme toggle in navbar
- */
+
 export function Home() {
   const { addToast } = useToast();
   const { setTheme } = useTheme();
