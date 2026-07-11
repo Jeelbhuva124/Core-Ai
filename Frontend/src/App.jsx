@@ -39,12 +39,6 @@ function App() {
             <Routes>
               {/* ── Standalone Pages ── */}
               <Route path="/dashboard" element={<Landing />} />
-              <Route path="/features" element={<Features />} />
-              <Route path="/performance" element={<Performance />} />
-              <Route path="/security" element={<Security />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route path="/login" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
 
               {/* ── User Panel (with Header & Footer) ─── */}
               <Route element={<UserLayout />}>
@@ -53,6 +47,12 @@ function App() {
                 <Route path="/shop" element={<Shop />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/features" element={<Features />} />
+                <Route path="/performance" element={<Performance />} />
+                <Route path="/security" element={<Security />} />
+                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/login" element={<SignIn />} />
+                <Route path="/signup" element={<SignUp />} />
               </Route>
 
               {/* ── Admin Panel (with Sidebar & Header) ── */}

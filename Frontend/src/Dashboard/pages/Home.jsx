@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import WebGLBackground from '../../components/WebGLBackground';
-import logoImg from '../../assets/logo2.png';
+
 
 const FadeIn = ({ children, delay = 0, className = '' }) => {
   const ref = useRef(null);
@@ -60,9 +60,9 @@ const Landing = () => {
              {/* Subtle glow behind logo */}
              <div className="absolute w-32 h-32 bg-cyan-500/20 blur-[40px] rounded-full" />
              <img 
-                src={logoImg} 
+                src="/logo.png" 
                 alt="Core AI Logo" 
-                className="w-32 h-32 object-contain drop-shadow-[0_0_30px_rgba(0,229,255,0.8)] relative z-10" 
+                className="w-32 h-32 object-contain drop-shadow-[0_0_30px_rgba(0,229,255,0.8)] relative z-10 dark:brightness-0 dark:invert" 
              />
            </motion.div>
         </motion.div>
@@ -87,7 +87,7 @@ const Landing = () => {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 mb-6 px-2">
-          <img src={logoImg} alt="Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]" />
+          <img src="/logo.png" alt="Logo" className="h-10 w-auto object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.4)] dark:brightness-0 dark:invert" />
           <span className="text-lg font-bold tracking-wide">Core AI</span>
         </div>
 

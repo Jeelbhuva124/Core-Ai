@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { UserNavbar } from './Navbar';
+import { UserNavbar } from './Header';
 import { UserFooter } from './Footer';
 
 export const UserLayout = () => {

@@ -1,15 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle';
-import logoImg from '../assets/logo2.png';
+
 
 export const UserNavbar = () => {
   const location = useLocation();
 
   const navLinks = [
-    { label: 'Chat', path: '/' },
-    { label: 'Shop', path: '/shop' },
+    { label: 'Home', path: '/' },
+    { label: 'Features', path: '/features' },
+    { label: 'Pricing', path: '/pricing' },
+    { label: 'Blog', path: '/blog' },
     { label: 'About', path: '/about' },
-    { label: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -17,8 +18,12 @@ export const UserNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 text-xl font-bold text-gradient">
-            <img src={logoImg} alt="Logo" className="w-12 h-12 object-contain drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]" />
+          <Link to="/" className="flex items-center gap-3 text-xl font-bold text-foreground">
+            <img 
+              src="/logo.png" 
+              alt="Logo" 
+              className="h-10 w-auto object-contain drop-shadow-sm dark:brightness-0 dark:invert" 
+            />
             <span>Core AI</span>
           </Link>
 
@@ -28,10 +33,10 @@ export const UserNavbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-sm transition-colors hover:text-foreground ${
                   location.pathname === link.path
-                    ? 'text-primary'
-                    : 'text-muted-foreground'
+                    ? 'text-foreground font-bold'
+                    : 'text-muted-foreground font-medium'
                 }`}
               >
                 {link.label}
@@ -41,13 +46,13 @@ export const UserNavbar = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-4">
-            <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary hidden sm:block">
-              Sign In
-            </Link>
-            <Link to="/signup" className="text-sm font-medium bg-primary text-primary-foreground px-4 py-2 rounded-xl hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">
-              Sign Up
-            </Link>
             <ThemeToggle />
+            <Link to="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
+              Log in
+            </Link>
+            <Link to="/signup" className="text-sm font-medium bg-foreground text-background px-4 py-2 rounded-xl hover:opacity-90 transition-opacity shadow-sm">
+              Get started
+            </Link>
           </div>
         </div>
       </div>

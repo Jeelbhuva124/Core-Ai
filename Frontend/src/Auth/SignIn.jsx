@@ -73,7 +73,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex w-full bg-background">
+    <div className="flex-1 flex w-full bg-background">
       {/* Left Panel - Dark Branding Side */}
       <div className="hidden lg:flex w-1/2 bg-[#0f172a] text-white flex-col justify-between p-12 xl:p-20 relative overflow-hidden">
         {/* Subtle background glow */}

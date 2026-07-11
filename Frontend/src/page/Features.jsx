@@ -38,8 +38,6 @@ const Features = () => {
       transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
       className="relative min-h-screen bg-background text-foreground py-20 px-6 md:px-12 overflow-hidden"
     >
-      <WebGLBackground />
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 pointer-events-none" />
       <button onClick={() => navigate(-1)} className="relative z-10 mb-12 flex items-center gap-2 hover:text-primary transition-colors font-medium">
         <ArrowLeft className="w-5 h-5" /> Back
       </button>
@@ -55,7 +53,7 @@ const Features = () => {
                 whileHover={{ scale: 1.05, y: -10 }} 
                 className="p-8 rounded-3xl bg-card border border-border/50 shadow-lg hover:shadow-cyan-500/10 transition-all duration-300"
               >
-                <div className="text-primary mb-6 bg-primary/10 w-12 h-12 flex items-center justify-center rounded-2xl">{feature.icon}</div>
+                <div className="text-blue-500 mb-6 bg-blue-500/10 w-12 h-12 flex items-center justify-center rounded-2xl">{feature.icon}</div>
                 <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{feature.desc}</p>
               </motion.div>

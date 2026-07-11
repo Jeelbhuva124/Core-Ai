@@ -10,8 +10,8 @@
   --card: 250 80% 99%;
   --card-foreground: 250 50% 15%;
 
-  /* Vibrant Pink/Purple Primary */
-  --primary: 320 85% 55%;
+  /* Bright Neon Violet Primary (Matched to dark theme) */
+  --primary: 262 83% 65%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 250 60% 95%;
@@ -25,7 +25,7 @@
 
   --border: 250 50% 88%;
   --input: 250 50% 88%;
-  --ring: 320 85% 55%;
+  --ring: 262 83% 65%;
 
   --destructive: 350 84.2% 60.2%;
   --destructive-foreground: 0 0% 100%;
