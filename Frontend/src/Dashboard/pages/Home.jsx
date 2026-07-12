@@ -183,8 +183,24 @@ const Landing = () => {
   const [messages, setMessages] = useState([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [socketConnected, setSocketConnected] = useState(socket.connected);
+  const [firstName, setFirstName] = useState('USER');
 
   const messagesEndRef = useRef(null);
+
+  // Load first name from local storage
+  useEffect(() => {
+    const storedUserStr = localStorage.getItem('user');
+    if (storedUserStr) {
+      try {
+        const userObj = JSON.parse(storedUserStr);
+        if (userObj.firstName) {
+          setFirstName(userObj.firstName.toUpperCase());
+        } else if (userObj.username) {
+          setFirstName(userObj.username.split(' ')[0].toUpperCase());
+        }
+      } catch (err) {}
+    }
+  }, []);
 
   // Setup sockets
   useEffect(() => {
@@ -285,16 +301,7 @@ const Landing = () => {
   };
 
   return (
-    <div className="flex flex-col h-full bg-background relative overflow-hidden">
-      
-      {/* Top Header Row: Connection Status */}
-      <div className="absolute top-4 right-4 z-50 flex items-center gap-3">
-        {/* Connection status indicator */}
-        <div className="flex items-center gap-2 bg-card/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-border shadow-sm text-xs font-medium">
-          <span className={`w-2 h-2 rounded-full ${socketConnected ? 'bg-emerald-500 animate-pulse' : 'bg-rose-500'}`} />
-          <span className="text-muted-foreground">{socketConnected ? 'Connected' : 'Disconnected'}</span>
-        </div>
-      </div>
+    <div className="flex flex-col h-full relative overflow-hidden">
 
       {/* Main Messages & Suggestions Container */}
       <div className="flex-1 overflow-y-auto w-full max-w-4xl mx-auto px-4 md:px-8 pt-12 pb-24 flex flex-col">
@@ -308,7 +315,7 @@ const Landing = () => {
               className="text-center"
             >
               <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-3 text-foreground flex items-center justify-center gap-2">
-                What can I help with, <span className="text-gradient">BHUVA</span>?
+                What can I help with, <span className="text-gradient">{firstName}</span>?
               </h1>
               <p className="text-sm text-muted-foreground font-normal">
                 Core AI streams knowledge via WebSockets instantly.

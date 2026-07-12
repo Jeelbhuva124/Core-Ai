@@ -24,8 +24,29 @@ export default function SignIn() {
 
       if (response.success) {
         addToast(response.message || "Connection established successfully!", "success");
+
+        let userToSave = response.user;
+
+        // Preserve previously saved firstName, lastName, and profilePicture if logging in with the same account
+        try {
+          const existingStr = localStorage.getItem("user");
+          if (existingStr) {
+            const existingUser = JSON.parse(existingStr);
+            const inputEmail = formData.email?.toLowerCase().trim();
+            if (
+              (existingUser.email && existingUser.email.toLowerCase() === inputEmail) || 
+              (existingUser.email_id && existingUser.email_id.toLowerCase() === inputEmail) ||
+              (existingUser.username && existingUser.username.toLowerCase() === inputEmail)
+            ) {
+              if (existingUser.firstName && !userToSave.firstName) userToSave.firstName = existingUser.firstName;
+              if (existingUser.lastName && !userToSave.lastName) userToSave.lastName = existingUser.lastName;
+              if (existingUser.profilePicture) userToSave.profilePicture = existingUser.profilePicture;
+            }
+          }
+        } catch (e) { }
+
         // Save user profile to session storage
-        localStorage.setItem("user", JSON.stringify(response.user));
+        localStorage.setItem("user", JSON.stringify(userToSave));
         if (response.user?.firebaseToken) {
           localStorage.setItem("token", response.user.firebaseToken);
         }
@@ -50,10 +71,37 @@ export default function SignIn() {
       const idToken = await result.user.getIdToken();
 
       const response = await userAPI.googleAuth({ idToken });
-      
+
       if (response.success) {
         addToast("Google Authentication successful!", "success");
-        localStorage.setItem("user", JSON.stringify(response.user));
+
+        let userToSave = response.user;
+
+        // Extract First and Last name from Google Profile to prevent onboarding prompt
+        if (result.user && result.user.displayName && (!userToSave.firstName || !userToSave.lastName)) {
+          const nameParts = result.user.displayName.split(' ');
+          userToSave.firstName = nameParts[0] || '';
+          userToSave.lastName = nameParts.slice(1).join(' ') || '';
+        }
+
+        // Preserve profile data from local storage if using the same email
+        try {
+          const existingStr = localStorage.getItem("user");
+          if (existingStr) {
+            const existingUser = JSON.parse(existingStr);
+            const inputEmail = result.user.email?.toLowerCase().trim();
+            if (
+              (existingUser.email && existingUser.email.toLowerCase() === inputEmail) || 
+              (existingUser.email_id && existingUser.email_id.toLowerCase() === inputEmail)
+            ) {
+              if (existingUser.firstName && !userToSave.firstName) userToSave.firstName = existingUser.firstName;
+              if (existingUser.lastName && !userToSave.lastName) userToSave.lastName = existingUser.lastName;
+              if (existingUser.profilePicture && !userToSave.profilePicture) userToSave.profilePicture = existingUser.profilePicture;
+            }
+          }
+        } catch (e) { }
+
+        localStorage.setItem("user", JSON.stringify(userToSave));
         localStorage.setItem("token", response.user.firebaseToken);
         navigate("/dashboard");
       } else {

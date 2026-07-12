@@ -39,7 +39,8 @@
   --warning-foreground: 38 92% 15%;
 
   /* Send Button */
-  --send-bg: 221 83% 53%; /* #3b82f6 */
+  --send-bg: 221 83% 53%;
+  /* #3b82f6 */
   --send-foreground: 0 0% 100%;
 
   --radius: 0.75rem;
@@ -49,10 +50,10 @@
 .dark {
   /* Main Background: #131314 */
   --background: 240 3% 8%;
-  
+
   /* Text: #e3e3e3 */
   --foreground: 0 0% 89%;
-  
+
   --card: 210 3% 12%;
   --card-foreground: 0 0% 89%;
 
@@ -86,7 +87,8 @@
   --warning-foreground: 0 0% 100%;
 
   /* Send Button */
-  --send-bg: 221 83% 53%; /* #3b82f6 */
+  --send-bg: 221 83% 53%;
+  /* #3b82f6 */
   --send-foreground: 0 0% 100%;
 }
 
@@ -183,6 +185,7 @@ body {
 ::-webkit-scrollbar {
   display: none;
 }
+
 * {
   scrollbar-width: none;
 }

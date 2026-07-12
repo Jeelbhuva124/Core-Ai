@@ -17,4 +17,9 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
+// Force Google Auth to always ask which account to use
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
+
 export { auth, googleProvider };

@@ -14,7 +14,7 @@ import { ImagesPage } from './Dashboard/pages/ImagesPage';
 import { VideosPage } from './Dashboard/pages/VideosPage';
 import { LibraryPage } from './Dashboard/pages/LibraryPage';
 import { NotebooksPage } from './Dashboard/pages/NotebooksPage';
-import { SettingsPage } from './Dashboard/pages/SettingsPage';
+import { ProfilePage } from './Dashboard/pages/ProfilePage';
 import { AiLayout } from './Dashboard/components/AiLayout';
 import Features from './page/Features';
 import Performance from './page/Performance';
@@ -56,7 +56,7 @@ function App() {
                 <Route path="videos" element={<VideosPage />} />
                 <Route path="library" element={<LibraryPage />} />
                 <Route path="notebooks" element={<NotebooksPage />} />
-                <Route path="settings" element={<SettingsPage />} />
+                <Route path="profile" element={<ProfilePage />} />
               </Route>
               <Route path="/login" element={<SignIn />} />
               <Route path="/signup" element={<SignUp />} />

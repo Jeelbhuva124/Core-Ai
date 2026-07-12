@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 const ScrollReveal = ({ children, delay = 0, className = '' }) => {
   const ref = useRef(null);
@@ -21,14 +22,39 @@ const ScrollReveal = ({ children, delay = 0, className = '' }) => {
 
 const Pricing = () => {
   const navigate = useNavigate();
+  const { theme } = useTheme();
+
+  const effectiveTheme = theme === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : theme;
+
   return (
     <motion.div 
       initial={{ opacity: 0, filter: 'blur(20px)' }} 
       animate={{ opacity: 1, filter: 'blur(0px)' }} 
       transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="relative min-h-screen bg-background text-foreground py-20 px-6 md:px-12 overflow-hidden"
+      className="relative min-h-screen text-foreground py-20 px-6 md:px-12 overflow-hidden"
+      style={{ backgroundColor: effectiveTheme === 'dark' ? '#050505' : '#ffffff' }}
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 pointer-events-none" />
+      {/* Atmospheric glow effects spanning the entire page */}
+      <div className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          background: effectiveTheme === 'dark'
+            ? `
+              radial-gradient(ellipse 700px 600px at 35% 20%, rgba(140, 50, 220, 0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 700px 600px at 85% 80%, rgba(30, 80, 220, 0.12) 0%, transparent 70%),
+              radial-gradient(ellipse 500px 400px at 85% 10%, rgba(120, 40, 200, 0.05) 0%, transparent 60%),
+              radial-gradient(ellipse 400px 300px at 35% 90%, rgba(100, 30, 180, 0.05) 0%, transparent 60%)
+            `
+            : `
+              radial-gradient(ellipse 700px 600px at 35% 20%, rgba(140, 50, 220, 0.40) 0%, transparent 70%),
+              radial-gradient(ellipse 700px 600px at 85% 80%, rgba(30, 80, 220, 0.40) 0%, transparent 70%),
+              radial-gradient(ellipse 500px 400px at 85% 10%, rgba(120, 40, 200, 0.25) 0%, transparent 60%),
+              radial-gradient(ellipse 400px 300px at 35% 90%, rgba(100, 30, 180, 0.25) 0%, transparent 60%)
+            `
+        }}
+      />
+      
       <button onClick={() => navigate(-1)} className="relative z-10 mb-12 flex items-center gap-2 hover:text-primary transition-colors font-medium">
         <ArrowLeft className="w-5 h-5" /> Back
       </button>

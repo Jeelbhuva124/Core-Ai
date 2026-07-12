@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus, Search, Image as ImageIcon, Video, BookOpen,
@@ -28,11 +28,10 @@ const NavItem = ({ icon: Icon, label, path, badge, onClick }) => {
     <Link
       to={path}
       onClick={onClick}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors w-full ${
-        isActive
-          ? 'bg-primary/15 text-primary'
-          : 'text-muted-foreground hover:bg-sidebar-hover hover:text-foreground'
-      }`}
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors w-full ${isActive
+        ? 'bg-primary/15 text-primary'
+        : 'text-muted-foreground hover:bg-sidebar-hover hover:text-foreground'
+        }`}
     >
       <Icon className="w-4 h-4 flex-shrink-0" />
       <span className="flex-1">{label}</span>
@@ -45,17 +44,62 @@ const NavItem = ({ icon: Icon, label, path, badge, onClick }) => {
   );
 };
 
-const SidebarContent = ({ onClose }) => {
+const SidebarContent = ({ onClose, onToggleDesktop }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [profileName, setProfileName] = useState('CORE AI USER');
+  const [profileEmail, setProfileEmail] = useState('Free Plan');
+  const [profilePicture, setProfilePicture] = useState(null);
+
+  useEffect(() => {
+    const loadUserData = () => {
+      const storedUserStr = localStorage.getItem('user');
+      if (storedUserStr) {
+        try {
+          const userObj = JSON.parse(storedUserStr);
+          if (userObj.firstName && userObj.lastName) {
+            setProfileName(`${userObj.firstName} ${userObj.lastName}`.toUpperCase());
+          } else if (userObj.username) {
+            setProfileName(userObj.username.toUpperCase());
+          }
+
+          if (userObj.email) {
+            setProfileEmail(userObj.email);
+          } else if (userObj.email_id) {
+            setProfileEmail(userObj.email_id);
+          }
+
+          if (userObj.profilePicture) {
+            setProfilePicture(userObj.profilePicture);
+          } else {
+            setProfilePicture(null);
+          }
+        } catch (err) {}
+      }
+    };
+
+    loadUserData();
+    window.addEventListener('profilePictureUpdated', loadUserData);
+    return () => window.removeEventListener('profilePictureUpdated', loadUserData);
+  }, []);
 
   return (
     <div className="flex flex-col h-full bg-sidebar border-r border-border">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-4 flex-shrink-0">
-        <div className="flex items-center gap-2 cursor-pointer hover:bg-sidebar-hover px-2 py-1.5 rounded-xl transition-colors -ml-2">
-          <Sparkles className="w-5 h-5 text-blue-400" />
-          <span className="text-lg font-medium text-foreground">Gemini</span>
+        <div 
+          onClick={() => {
+            navigate('/dashboard');
+            onClose?.();
+          }}
+          className="flex items-center gap-2 cursor-pointer hover:bg-sidebar-hover px-2 py-1.5 rounded-xl transition-colors -ml-2"
+        >
+          <img 
+            src="/logo.png" 
+            alt="Core AI Logo" 
+            className="h-6 w-auto object-contain dark:brightness-0 dark:invert transition-all" 
+          />
+          <span className="text-[17px] font-semibold text-foreground tracking-wide">CORE AI</span>
         </div>
         <div className="flex items-center gap-1">
           {onClose ? (
@@ -160,30 +204,53 @@ const SidebarContent = ({ onClose }) => {
       {/* User Profile */}
       <div className="px-3 py-3 flex-shrink-0">
         <button
-          onClick={() => { navigate('/dashboard/settings'); onClose?.(); }}
+          onClick={() => { navigate('/dashboard/profile'); onClose?.(); }}
           className="flex items-center gap-3 w-full px-2 py-2 rounded-2xl hover:bg-sidebar-hover transition-colors group"
         >
-          <div className="w-8 h-8 rounded-full bg-[#009de0] flex items-center justify-center text-white font-medium text-[15px] flex-shrink-0">
-            J
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-blue-600 p-[2px] shadow-sm flex-shrink-0">
+            {profilePicture ? (
+              <img 
+                src={profilePicture} 
+                alt="Profile" 
+                className="w-full h-full rounded-full object-cover border-2 border-transparent bg-card"
+              />
+            ) : (
+              <div className="w-full h-full rounded-full bg-card border-2 border-transparent flex items-center justify-center">
+                <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary to-blue-500">
+                  {profileName.charAt(0)}
+                </span>
+              </div>
+            )}
           </div>
-          <div className="flex-1 text-left min-w-0">
-            <p className="text-[13px] font-medium text-foreground truncate uppercase">BHUVA JEEL MAGANBHAI</p>
-            <p className="text-[11px] text-muted-foreground">Pro</p>
+          <div className="flex flex-col text-left overflow-hidden">
+            <p className="text-[13px] font-medium text-foreground truncate uppercase">{profileName}</p>
+            <span className="text-[10px] text-muted-foreground font-medium tracking-wide mt-0.5 truncate">{profileEmail}</span>
           </div>
-          <Settings className="w-4 h-4 text-muted-foreground flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
         </button>
       </div>
     </div>
   );
 };
 
-export const AiSidebar = ({ mobileOpen, onClose }) => {
+export const AiSidebar = ({ mobileOpen, onClose, desktopOpen, onToggleDesktop }) => {
   return (
     <>
-      {/* Desktop Sidebar — always visible on lg+ */}
-      <div className="hidden lg:flex w-64 flex-shrink-0 h-full">
-        <SidebarContent />
-      </div>
+      {/* Desktop Sidebar — visible on lg+ when desktopOpen is true */}
+      <AnimatePresence initial={false}>
+        {desktopOpen && (
+          <motion.div
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 256, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="hidden lg:block h-full flex-shrink-0 overflow-hidden"
+          >
+            <div className="w-64 h-full">
+              <SidebarContent onClose={null} onToggleDesktop={onToggleDesktop} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Mobile Sidebar — overlay drawer */}
       <AnimatePresence>
@@ -208,7 +275,7 @@ export const AiSidebar = ({ mobileOpen, onClose }) => {
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               className="fixed left-0 top-0 bottom-0 w-64 z-50 lg:hidden"
             >
-              <SidebarContent onClose={onClose} />
+              <SidebarContent onClose={onClose} onToggleDesktop={null} />
             </motion.div>
           </>
         )}
